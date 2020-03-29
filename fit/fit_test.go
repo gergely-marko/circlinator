@@ -1,12 +1,14 @@
 package fit
 
 import (
-	"geometry"
-	. "geometry"
+	. "circlinator/geometry"
+
 	"math"
 	"math/rand"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestOnCircle(t *testing.T) {
@@ -18,8 +20,8 @@ func TestOnCircle(t *testing.T) {
 
 	result := Fit(points)
 
-	assertDistance(source.Center, result.Center, 3.0, t)
-	assertAbsFloat(source.Radius, result.Radius, 6.0, t)
+	assert.InDelta(t, Distance(source.Center, result.Center), 0.0, 1.0, "Distance of centers")
+	assert.InDelta(t, source.Radius, result.Radius, 3.0, "Radii of circles")
 }
 
 func TestOnArc(t *testing.T) {
@@ -31,20 +33,8 @@ func TestOnArc(t *testing.T) {
 
 	result := Fit(points)
 
-	assertDistance(source.Center, result.Center, 3.0, t)
-	assertAbsFloat(source.Radius, result.Radius, 6.0, t)
-}
-
-func assertDistance(expected Point, actual Point, threshold float64, t *testing.T) {
-	assertAbsFloat(0.0, Distance(expected, actual), threshold, t)
-}
-
-func assertAbsFloat(expected float64, actual float64, threshold float64, t *testing.T) {
-	delta := math.Abs(actual - expected)
-
-	if delta > threshold {
-		t.Errorf("Delta (%0.2f) is greater than threshold (%0.2f)", delta, threshold)
-	}
+	assert.InDelta(t, Distance(source.Center, result.Center), 0.0, 1.0, "Distance of centers")
+	assert.InDelta(t, source.Radius, result.Radius, 3.0, "Radii of circles")
 }
 
 func generatePoints(circle Circle, startAngle float64, endAngle float64, count int, noise float64) []Point {
@@ -62,7 +52,7 @@ func generatePoints(circle Circle, startAngle float64, endAngle float64, count i
 		x := circle.Center.X + radius*math.Cos(alpha)
 		y := circle.Center.Y + radius*math.Sin(alpha)
 
-		result = append(result, geometry.Point{X: x, Y: y})
+		result = append(result, Point{X: x, Y: y})
 	}
 
 	return result

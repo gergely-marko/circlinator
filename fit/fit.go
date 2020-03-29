@@ -1,8 +1,9 @@
 package fit
 
 import (
-	. "geometry"
 	"math"
+
+	. "circlinator/geometry"
 )
 
 // This is a dummy implementation
